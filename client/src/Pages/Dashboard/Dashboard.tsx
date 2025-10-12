@@ -113,7 +113,10 @@ export const Dashboard = () => {
 			<div className="grow rounded-lg overflow-hidden flex flex-col mt-2">
 				<div className="overflow-y-auto h-full">
 					{jobs.map((job) => (
-						<div key={job.id} className="bg-secondary mb-2 p-2 rounded">
+						<div
+							key={job.id}
+							className="bg-secondary mb-2 p-2 rounded last:mb-20"
+						>
 							<p className="font-bold">{job.jobTitle}</p>
 							<p className="text-sm">{job.company}</p>
 							<p className="text-xs">{job.status}</p>
