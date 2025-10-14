@@ -1,22 +1,25 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import type { ApiResponse } from "shared/dist";
+import { jobs } from "./routes/jobs";
 
 export const app = new Hono()
 
-.use(cors())
+	.use(cors())
 
-.get("/", (c) => {
-	return c.text("Hello Hono!");
-})
+	.route("/jobs", jobs);
 
-.get("/hello", async (c) => {
-	const data: ApiResponse = {
-		message: "Hello BHVR!",
-		success: true,
-	};
+// .get("/", (c) => {
+// 	return c.text("Hello Hono!");
+// })
 
-	return c.json(data, { status: 200 });
-});
+// .get("/hello", async (c) => {
+// 	const data: ApiResponse = {
+// 		message: "Hello BHVR!",
+// 		success: true,
+// 	};
+
+// 	return c.json(data, { status: 200 });
+// });
 
 export default app;

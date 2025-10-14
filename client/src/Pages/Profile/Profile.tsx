@@ -14,7 +14,7 @@ export const Profile = () => {
 					<AvatarImage src="https://github.com/shadcn.png" />
 					<AvatarFallback>OO</AvatarFallback>
 				</Avatar>
-				<p className="text-lg font-bold">Ocha Oxana</p>
+				<p className="text-lg font-bold">Xannna</p>
 			</div>
 			<div className="grow flex flex-col p-2 gap-1 text-md border-t-2 border-primary">
 				<div className="flex px-2 py-3 justify-between items-center">
