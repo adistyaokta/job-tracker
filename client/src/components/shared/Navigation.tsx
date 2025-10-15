@@ -2,7 +2,7 @@ import { Home, User } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { AddJobModal } from "./AddJobModal";
+import { JobModal } from "./JobModal";
 
 export const Navigation = () => {
 	const { pathname } = useLocation();
@@ -22,7 +22,7 @@ export const Navigation = () => {
 				</Link>
 			</Button>
 
-			<AddJobModal />
+			<JobModal />
 
 			<Button
 				size={"icon"}

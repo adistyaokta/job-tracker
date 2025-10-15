@@ -1,9 +1,9 @@
-import { useGetJobs } from "@/api/jobs/getJobs";
+import { Search } from "lucide-react";
+import { useGetJobs } from "@/api/jobs";
 import { MainWrapper } from "@/components/shared";
 import { JobCard } from "@/components/shared/JobCard";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { Search } from "lucide-react";
 
 export const Dashboard = () => {
 	const {

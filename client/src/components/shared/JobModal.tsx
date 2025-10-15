@@ -1,17 +1,19 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: <explanation> */
-import { addJob } from "@/api/jobs";
-import { queryClient } from "@/lib/query-client";
+
 import { useForm } from "@tanstack/react-form";
-import { useMutation } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
+import { useEffect, useRef } from "react";
 import {
 	type CreateJob,
+	CreateJobSchema,
 	type JobStatus,
 	type JobType,
-	CreateJobSchema,
 	statusLabels,
 	typeLabels,
 } from "shared/dist";
+import { useAddJob } from "@/api/jobs";
+import { useJobStore } from "@/lib/store";
+import { formatDate } from "@/utils";
 import { Button } from "../ui/button";
 import {
 	Dialog,
@@ -31,8 +33,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { useAddJob } from "@/api/jobs/addJobs";
-import { useRef, useState } from "react";
+import { useUpdateApplication } from "@/api/jobs/updateApplication";
 
 const defaultValues = {
 	company: "",
@@ -44,8 +45,12 @@ const defaultValues = {
 	status: "APPLIED",
 } as CreateJob;
 
-export const AddJobModal = () => {
-	const [open, setOpen] = useState(false);
+export const JobModal = () => {
+	const ref = useRef(null);
+	const open = useJobStore((state) => state.isJobDialogOpen);
+	const setOpen = useJobStore((state) => state.setJobDialogOpen);
+	const setSelectedJob = useJobStore((state) => state.setSelectedJob);
+	const job = useJobStore((state) => state.selectedJob);
 
 	const { mutate: addJobMutation, isPending: addJobPending } = useAddJob({
 		mutationConfig: {
@@ -55,20 +60,47 @@ export const AddJobModal = () => {
 			},
 		},
 	});
+	const {
+		mutate: updateApplicationMutation,
+		isPending: updateApplicationPending,
+	} = useUpdateApplication({
+		mutationConfig: {
+			onSuccess: () => {
+				form.reset();
+				setOpen(false);
+			},
+		},
+	});
 
 	const form = useForm({
-		defaultValues,
+		defaultValues: job ? job : defaultValues,
 		validators: {
 			onChange: CreateJobSchema,
 		},
 		onSubmit: async ({ value }) => {
-			addJobMutation(value);
+			if (!job) {
+				addJobMutation(value);
+			}
+			console.log(value);
+			updateApplicationMutation(value);
 		},
 	});
 
+	useEffect(() => {
+		if (!job) return;
+		form.reset(job);
+	}, [job, form]);
+
+	useEffect(() => {
+		if (!open) {
+			setSelectedJob(null);
+			form.reset();
+		}
+	}, [open, setSelectedJob, form]);
+
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger asChild>
+			<DialogTrigger ref={ref} asChild>
 				<Button
 					size={"icon"}
 					variant={"secondary"}
@@ -80,7 +112,9 @@ export const AddJobModal = () => {
 			<DialogContent className="max-w-sm max-h-11/12 overflow-scroll no-scrollbar">
 				<DialogDescription> </DialogDescription>
 				<DialogHeader>
-					<DialogTitle className="font-bold">Add new job</DialogTitle>
+					<DialogTitle className="font-bold">
+						{job ? "Update Application Detail" : "Add New Job"}
+					</DialogTitle>
 				</DialogHeader>
 				<form
 					onSubmit={(e) => {
@@ -255,6 +289,18 @@ export const AddJobModal = () => {
 								</div>
 							)}
 						</form.Field>
+						{job && (
+							<div className="p-1 bg-secondary rounded-md border border-primary/20 flex flex-col gap-1 divide-y text-xs lg:text-sm">
+								<div className="flex justify-between">
+									<Label>Applied At</Label>
+									<p>{formatDate(job.createdAt ?? "")}</p>
+								</div>
+								<div className="flex justify-between">
+									<Label>Last Update</Label>
+									<p>{job.updatedAt ? formatDate(job.updatedAt ?? "") : "-"}</p>
+								</div>
+							</div>
+						)}
 					</div>
 					<DialogFooter>
 						<div className="flex gap-2 items-center justify-center">
@@ -270,7 +316,9 @@ export const AddJobModal = () => {
 									<Button
 										type="submit"
 										className="grow"
-										disabled={!canSubmit || addJobPending}
+										disabled={
+											!canSubmit || addJobPending || updateApplicationPending
+										}
 									>
 										{isSubmitting ? "..." : "Submit"}
 									</Button>

@@ -1,14 +1,19 @@
 import type { Job } from "shared";
 import { formatDate } from "@/utils";
 import { Badge } from "../ui/badge";
+import { useJobStore } from "@/lib/store";
 
 type JobCardProps = {
 	job: Job;
 };
 
 export const JobCard = ({ job }: JobCardProps) => {
+	const setOpen = useJobStore((state) => state.setJobDialogOpen);
+	const setSelectedJob = useJobStore((state) => state.setSelectedJob);
+
 	const handleClick = () => {
-		// alert(job.id);
+		setOpen(true);
+		setSelectedJob(job);
 	};
 
 	return (

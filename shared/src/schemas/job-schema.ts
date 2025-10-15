@@ -17,7 +17,7 @@ export const JobSchema = z.object({
 	position: z.string().min(1, "Position is required"),
 	platform: z.string().min(1, "Platform is required"),
 	email: z.email(),
-	link: z.string(),
+	link: z.string().nullable(),
 	type: TypeSchema,
 	status: StatusSchema,
 	createdAt: z.string().nullable(),
@@ -35,7 +35,7 @@ export const CreateJobSchema = z.object({
 	status: StatusSchema,
 });
 
-export const UpdateJobSchema = CreateJobSchema.partial();
+export const UpdateJobSchema = JobSchema.partial();
 
 export type JobType = z.infer<typeof TypeSchema>;
 export type JobStatus = z.infer<typeof StatusSchema>;

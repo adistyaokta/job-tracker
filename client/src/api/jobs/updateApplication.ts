@@ -1,24 +1,26 @@
 import { axiosInstance } from "@/lib/axios";
 import type { MutationConfig } from "@/lib/query-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { CreateJob } from "shared";
+import type { UpdateJob } from "shared";
 import { getJobsQueryKey } from "./getJobs";
 
-export const addJob = async (job: CreateJob) => {
-	const response = await axiosInstance.post("/jobs", job);
+export const updateApplication = async (job: UpdateJob) => {
+	const response = await axiosInstance.put(`/jobs/${job.id}`, job);
 
 	return response.data;
 };
 
-type useAddJobParams = {
-	mutationConfig?: MutationConfig<typeof addJob>;
+type useUpdateApplicationParams = {
+	mutationConfig?: MutationConfig<typeof updateApplication>;
 };
 
-export const useAddJob = (params: useAddJobParams = {}) => {
+export const useUpdateApplication = (
+	params: useUpdateApplicationParams = {},
+) => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: addJob,
+		mutationFn: updateApplication,
 		...params.mutationConfig,
 		onSuccess: (data, variables, onMutateResult, context) => {
 			queryClient.invalidateQueries({ queryKey: getJobsQueryKey() });
