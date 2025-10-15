@@ -20,19 +20,34 @@ export const JobSchema = z.object({
 	link: z.string(),
 	type: TypeSchema,
 	status: StatusSchema,
-	createdAt: z.string(),
-	updatedAt: z.string(),
-	deletedAt: z.string(),
+	createdAt: z.string().nullable(),
+	updatedAt: z.string().nullable(),
+	deletedAt: z.string().nullable(),
 });
+
+export const CreateJobSchema = z.object({
+	company: z.string().min(1, "Company name is required"),
+	position: z.string().min(1, "Position is required"),
+	platform: z.string().min(1, "Platform is required"),
+	email: z.email("Invalid email"),
+	link: z.string().nullable(),
+	type: TypeSchema,
+	status: StatusSchema,
+});
+
+export const UpdateJobSchema = CreateJobSchema.partial();
 
 export type JobType = z.infer<typeof TypeSchema>;
 export type JobStatus = z.infer<typeof StatusSchema>;
+
 export type Job = z.infer<typeof JobSchema>;
+export type CreateJob = z.infer<typeof CreateJobSchema>;
+export type UpdateJob = z.infer<typeof UpdateJobSchema>;
 
 // CONSTANT
 export const typeLabels: Record<JobType, string> = {
-	FULLTIME: "Full-Time",
-	PARTTIME: "Part-Time",
+	FULLTIME: "Full Time",
+	PARTTIME: "Part Time",
 	FREELANCE: "Freelance",
 };
 

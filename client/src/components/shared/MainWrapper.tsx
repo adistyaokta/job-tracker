@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils";
 import type React from "react";
-import { MobileNavigation } from "./MobileNavigation";
+import { cn } from "@/lib/utils";
+import { Navigation } from "./Navigation";
 
 export const MainWrapper = ({
 	className,
@@ -10,13 +10,13 @@ export const MainWrapper = ({
 	return (
 		<div
 			className={cn(
-				"h-full min-h-dvh max-h-dvh p-2 flex flex-col gap-2 relative overflow-hidden",
+				"grow md:max-w-7xl p-2 flex flex-col gap-2 relative overflow-hidden rounded-lg border bg-background",
 				className,
 			)}
 			{...props}
 		>
 			{children}
-			<MobileNavigation />
+			<Navigation />
 		</div>
 	);
 };

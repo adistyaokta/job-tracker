@@ -1,3 +1,3 @@
 export * from "./AddJobModal";
 export * from "./MainWrapper";
-export * from "./MobileNavigation";
+export * from "./Navigation";

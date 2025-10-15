@@ -1,101 +1,17 @@
+import { useGetJobs } from "@/api/jobs/getJobs";
 import { MainWrapper } from "@/components/shared";
+import { JobCard } from "@/components/shared/JobCard";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Search } from "lucide-react";
 
-const jobs = [
-	{
-		id: 1,
-		jobTitle: "Front-End Developer",
-		company: "Google",
-		location: "Mountain View, CA",
-		dateApplied: "2025-09-15",
-		status: "Interview Scheduled",
-		notes: "Technical interview on Oct 12",
-	},
-	{
-		id: 2,
-		jobTitle: "Product Designer",
-		company: "Figma",
-		location: "Remote",
-		dateApplied: "2025-09-10",
-		status: "Under Review",
-		notes: "Waiting for recruiter response",
-	},
-	{
-		id: 3,
-		jobTitle: "Data Analyst",
-		company: "Spotify",
-		location: "New York, NY",
-		dateApplied: "2025-09-20",
-		status: "Rejected",
-		notes: "Received rejection email on Sep 30",
-	},
-	{
-		id: 4,
-		jobTitle: "Backend Engineer",
-		company: "Amazon",
-		location: "Seattle, WA",
-		dateApplied: "2025-09-22",
-		status: "Phone Screen Completed",
-		notes: "Waiting for feedback",
-	},
-	{
-		id: 5,
-		jobTitle: "UX Researcher",
-		company: "Adobe",
-		location: "San Francisco, CA",
-		dateApplied: "2025-09-25",
-		status: "Applied",
-		notes: "No update yet",
-	},
-	{
-		id: 6,
-		jobTitle: "Software Engineer Intern",
-		company: "Microsoft",
-		location: "Remote",
-		dateApplied: "2025-09-18",
-		status: "Interview Scheduled",
-		notes: "Second round interview on Oct 14",
-	},
-	{
-		id: 7,
-		jobTitle: "Marketing Coordinator",
-		company: "HubSpot",
-		location: "Boston, MA",
-		dateApplied: "2025-09-12",
-		status: "Offer Received",
-		notes: "Considering offer",
-	},
-	{
-		id: 8,
-		jobTitle: "Data Scientist",
-		company: "OpenAI",
-		location: "San Francisco, CA",
-		dateApplied: "2025-09-28",
-		status: "Applied",
-		notes: "Awaiting response",
-	},
-	{
-		id: 9,
-		jobTitle: "DevOps Engineer",
-		company: "Atlassian",
-		location: "Sydney, AUS",
-		dateApplied: "2025-09-30",
-		status: "Under Review",
-		notes: "Recruiter follow-up next week",
-	},
-	{
-		id: 10,
-		jobTitle: "Project Manager",
-		company: "Asana",
-		location: "Remote",
-		dateApplied: "2025-09-19",
-		status: "Rejected",
-		notes: "Will reapply next cycle",
-	},
-];
-
 export const Dashboard = () => {
+	const {
+		data: jobs,
+		isLoading: fetchJobsLoading,
+		error: fetchJobsError,
+	} = useGetJobs();
+
 	return (
 		<MainWrapper>
 			<div className="bg-primary rounded-lg text-primary-foreground text-lg py-4 px-2 flex justify-between items-center">
@@ -111,17 +27,20 @@ export const Dashboard = () => {
 				</Button>
 			</div>
 			<div className="grow rounded-lg overflow-hidden flex flex-col mt-2">
-				<div className="overflow-y-auto h-full">
-					{jobs.map((job) => (
-						<div
-							key={job.id}
-							className="bg-secondary mb-2 p-2 rounded last:mb-20"
-						>
-							<p className="font-bold">{job.jobTitle}</p>
-							<p className="text-sm">{job.company}</p>
-							<p className="text-xs">{job.status}</p>
+				<div className="overflow-y-auto h-full flex flex-col gap-2">
+					{fetchJobsError && <p>Something went wrong.</p>}
+					{fetchJobsLoading && !jobs && (
+						<div className="h-40 flex items-center justify-center">
+							<Spinner />
 						</div>
-					))}
+					)}
+					{!fetchJobsLoading && !jobs?.length && (
+						<div className="h-40 flex items-center justify-center">
+							no jobs yet
+						</div>
+					)}
+					{!fetchJobsLoading &&
+						jobs?.map((job) => <JobCard job={job} key={job.id} />)}
 				</div>
 			</div>
 		</MainWrapper>

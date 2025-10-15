@@ -1,25 +1,21 @@
+import { config } from "dotenv";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import type { ApiResponse } from "shared/dist";
+import { logger } from "hono/logger";
 import { jobs } from "./routes/jobs";
+
+config();
 
 export const app = new Hono()
 
+	.use(logger())
 	.use(cors())
 
 	.route("/jobs", jobs);
 
-// .get("/", (c) => {
-// 	return c.text("Hello Hono!");
-// })
-
-// .get("/hello", async (c) => {
-// 	const data: ApiResponse = {
-// 		message: "Hello BHVR!",
-// 		success: true,
-// 	};
-
-// 	return c.json(data, { status: 200 });
-// });
-
-export default app;
+export default {
+	port: Number(process.env.PORT) || 3001,
+	host: process.env.HOST,
+	fetch: app.fetch,
+};
+// export default app;

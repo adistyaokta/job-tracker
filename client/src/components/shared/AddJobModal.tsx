@@ -1,10 +1,14 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: <explanation> */
+import { addJob } from "@/api/jobs";
+import { queryClient } from "@/lib/query-client";
 import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
 import {
-	JobSchema,
+	type CreateJob,
 	type JobStatus,
 	type JobType,
+	CreateJobSchema,
 	statusLabels,
 	typeLabels,
 } from "shared/dist";
@@ -27,43 +31,53 @@ import {
 } from "../ui/dropdown-menu";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import axios from "axios";
+import { useAddJob } from "@/api/jobs/addJobs";
+import { useRef, useState } from "react";
 
 const defaultValues = {
 	company: "",
 	position: "",
 	platform: "",
 	email: "",
-	link: "",
+	link: null,
 	type: "FULLTIME",
 	status: "APPLIED",
-};
+} as CreateJob;
 
 export const AddJobModal = () => {
+	const [open, setOpen] = useState(false);
+
+	const { mutate: addJobMutation, isPending: addJobPending } = useAddJob({
+		mutationConfig: {
+			onSuccess: () => {
+				form.reset();
+				setOpen(false);
+			},
+		},
+	});
+
 	const form = useForm({
 		defaultValues,
 		validators: {
-			onChange: JobSchema,
+			onChange: CreateJobSchema,
 		},
 		onSubmit: async ({ value }) => {
-			const data = await axios.post("http://localhost:3000/jobs", value);
-
-			console.log("🚀 ~ AddJobModal ~ data:", data);
+			addJobMutation(value);
 		},
 	});
 
 	return (
-		<Dialog>
+		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				<Button
 					size={"icon"}
 					variant={"secondary"}
-					className="rounded-full mx-auto fixed"
+					className="rounded-full mx-auto"
 				>
 					<Plus className="size-6" />
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="max-w-sm max-h-11/12 overflow-scroll">
+			<DialogContent className="max-w-sm max-h-11/12 overflow-scroll no-scrollbar">
 				<DialogDescription> </DialogDescription>
 				<DialogHeader>
 					<DialogTitle className="font-bold">Add new job</DialogTitle>
@@ -126,7 +140,7 @@ export const AddJobModal = () => {
 							{({ state, handleChange, handleBlur }) => (
 								<div className="grid gap-3">
 									<Label htmlFor="platform">
-										Platform{" "}
+										Platform
 										{state.meta.errors.length > 0 && (
 											<p className="text-xs text-destructive font-normal">
 												*{state.meta.errors[0]?.message}
@@ -148,7 +162,7 @@ export const AddJobModal = () => {
 							{({ state, handleChange, handleBlur }) => (
 								<div className="grid gap-3">
 									<Label htmlFor="email">
-										Email{" "}
+										Email
 										{state.meta.errors.length > 0 && (
 											<p className="text-xs text-destructive font-normal">
 												*{state.meta.errors[0]?.message}
@@ -171,7 +185,7 @@ export const AddJobModal = () => {
 							{({ state, handleChange, handleBlur }) => (
 								<div className="grid gap-3">
 									<Label htmlFor="link">
-										Link{" "}
+										Link
 										{state.meta.errors.length > 0 && (
 											<p className="text-xs text-destructive font-normal">
 												*{state.meta.errors[0]?.message}
@@ -184,7 +198,7 @@ export const AddJobModal = () => {
 										placeholder="http://linkedin.com/job-link"
 										onChange={(e) => handleChange(e.target.value)}
 										onBlur={handleBlur}
-										value={state.value}
+										value={state.value ?? ""}
 									/>
 								</div>
 							)}
@@ -205,7 +219,7 @@ export const AddJobModal = () => {
 											{Object.entries(typeLabels).map(([value, label]) => (
 												<DropdownMenuItem
 													key={value}
-													onClick={() => handleChange(value)}
+													onClick={() => handleChange(value as JobType)}
 												>
 													{label}
 												</DropdownMenuItem>
@@ -231,7 +245,7 @@ export const AddJobModal = () => {
 											{Object.entries(statusLabels).map(([value, label]) => (
 												<DropdownMenuItem
 													key={value}
-													onClick={() => handleChange(value)}
+													onClick={() => handleChange(value as JobStatus)}
 												>
 													{label}
 												</DropdownMenuItem>
@@ -253,7 +267,11 @@ export const AddJobModal = () => {
 								selector={(state) => [state.canSubmit, state.isSubmitting]}
 							>
 								{([canSubmit, isSubmitting]) => (
-									<Button type="submit" className="grow" disabled={!canSubmit}>
+									<Button
+										type="submit"
+										className="grow"
+										disabled={!canSubmit || addJobPending}
+									>
 										{isSubmitting ? "..." : "Submit"}
 									</Button>
 								)}
