@@ -8,6 +8,6 @@ CREATE TABLE "jobs" (
 	"type" text,
 	"status" text,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now(),
 	"deleted_at" timestamp
 );
