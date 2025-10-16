@@ -233,7 +233,7 @@ export const JobModal = () => {
 									{job?.id ? (
 										<Button asChild variant={"outline"}>
 											<Link to={job?.link ?? "#"} className="text-sm">
-												View Job
+												View Job Posting
 											</Link>
 										</Button>
 									) : (

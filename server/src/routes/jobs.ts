@@ -11,7 +11,7 @@ export const jobs = new Hono();
 jobs.get("/", async (c) => {
 	// PAGINATION
 	const page = Number(c.req.query("page")) || 1;
-	const limit = Number(c.req.query("limit")) || 1;
+	const limit = Number(c.req.query("limit")) || 10;
 	const offset = (page - 1) * limit;
 
 	const search = c.req.query("search")?.trim();
@@ -24,13 +24,16 @@ jobs.get("/", async (c) => {
 	}
 
 	if (search) {
-		filters.push(or(ilike(jobsTable.company, `%${search}%`)));
-		filters.push(or(ilike(jobsTable.position, `%${search}%`)));
-		filters.push(or(ilike(jobsTable.platform, `%${search}%`)));
+		filters.push(
+			or(
+				ilike(jobsTable.company, `%${search}%`),
+				ilike(jobsTable.position, `%${search}%`),
+				ilike(jobsTable.platform, `%${search}%`),
+			),
+		);
 	}
 
 	const whereClause = filters.length > 0 ? and(...filters) : undefined;
-	console.log("🚀 ~ whereClause:", whereClause);
 
 	const jobList = await db
 		.select()
@@ -51,11 +54,12 @@ jobs.get("/", async (c) => {
 		meta: {
 			page,
 			limit,
-			total: Number(countTotal?.count),
-			totalPages: Math.ceil(Number(countTotal?.count) / limit),
+			total: Number(countTotal?.count || 0),
+			totalPages: Math.ceil(Number(countTotal?.count || 0) / limit),
 		},
 	});
 });
+
 jobs.post(
 	"/",
 	zValidator("json", CreateJobSchema) as unknown as MiddlewareHandler,
