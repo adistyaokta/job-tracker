@@ -23,7 +23,6 @@ export const Dashboard = () => {
 		params: getJobParams,
 	});
 
-	const load = true;
 	return (
 		<MainWrapper>
 			<DashboardHeader />
