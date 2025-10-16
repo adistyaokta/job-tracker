@@ -1,9 +1,17 @@
-import { Search } from "lucide-react";
+import { BriefcaseBusiness, Search } from "lucide-react";
 import { useGetJobs } from "@/api/jobs";
 import { MainWrapper } from "@/components/shared";
 import { JobCard } from "@/components/shared/JobCard";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import {
+	Empty,
+	EmptyContent,
+	EmptyDescription,
+	EmptyHeader,
+	EmptyMedia,
+	EmptyTitle,
+} from "@/components/ui/empty";
 
 export const Dashboard = () => {
 	const {
@@ -30,14 +38,20 @@ export const Dashboard = () => {
 				<div className="overflow-y-auto h-full flex flex-col gap-2">
 					{fetchJobsError && <p>Something went wrong.</p>}
 					{fetchJobsLoading && !jobs && (
-						<div className="h-40 flex items-center justify-center">
-							<Spinner />
+						<div className="m-auto w-fit flex items-center justify-center animate-bounce">
+							<Spinner className="size-10" />
 						</div>
 					)}
 					{!fetchJobsLoading && !jobs?.length && (
-						<div className="h-40 flex items-center justify-center">
-							no jobs yet
-						</div>
+						<Empty>
+							<EmptyHeader>
+								<EmptyMedia variant="icon" className="size-14">
+									<BriefcaseBusiness className="size-8" />
+								</EmptyMedia>
+								<EmptyTitle>No data</EmptyTitle>
+								<EmptyDescription>No job application found</EmptyDescription>
+							</EmptyHeader>
+						</Empty>
 					)}
 					{!fetchJobsLoading &&
 						jobs?.map((job) => <JobCard job={job} key={job.id} />)}
