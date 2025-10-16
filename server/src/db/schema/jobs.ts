@@ -11,9 +11,23 @@ export const jobs = pgTable("jobs", {
 	link: text("link"),
 	type: text("type").$type<z.infer<typeof TypeSchema>>(),
 	status: text("status").$type<z.infer<typeof StatusSchema>>(),
-	createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { mode: "date" }).$onUpdate(
-		() => new Date(),
-	),
-	deletedAt: timestamp("deleted_at", { mode: "date" }),
+	createdAt: timestamp("created_at", {
+		mode: "date",
+		precision: 3,
+		withTimezone: true,
+	})
+		.defaultNow()
+		.notNull(),
+	updatedAt: timestamp("updated_at", {
+		mode: "date",
+		precision: 3,
+		withTimezone: true,
+	})
+		.notNull()
+		.$onUpdateFn(() => new Date()),
+	deletedAt: timestamp("deleted_at", {
+		mode: "date",
+		precision: 3,
+		withTimezone: true,
+	}),
 });

@@ -31,7 +31,7 @@ export const JobCard = ({ job }: JobCardProps) => {
 				e.stopPropagation();
 				handleClick();
 			}}
-			className="flex flex-col p-2 gap-1 rounded-lg cursor-pointer border border-primary/20 focus:bg-primary/10 hover:bg-primary/10 last:mb-20"
+			className="flex flex-col p-2 h-fit gap-1 rounded-lg cursor-pointer border border-primary/20 focus:bg-primary/10 hover:bg-primary/10 last:mb-20"
 		>
 			<div className="flex items-center justify-between w-full">
 				<p className="font-bold truncate">{job.position}</p>

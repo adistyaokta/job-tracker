@@ -49,8 +49,7 @@ const defaultValues = {
 
 export const JobModal = () => {
 	const ref = useRef(null);
-	const open = useJobStore((state) => state.isJobDialogOpen);
-	const setOpen = useJobStore((state) => state.setJobDialogOpen);
+	const { isJobDialogOpen: open, setJobDialogOpen: setOpen } = useJobStore();
 	const setSelectedJob = useJobStore((state) => state.setSelectedJob);
 	const job = useJobStore((state) => state.selectedJob);
 

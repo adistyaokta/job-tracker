@@ -1,41 +1,33 @@
-import { BriefcaseBusiness, Search } from "lucide-react";
 import { useGetJobs } from "@/api/jobs";
-import { MainWrapper } from "@/components/shared";
+import { DashboardHeader, MainWrapper } from "@/components/shared";
 import { JobCard } from "@/components/shared/JobCard";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import {
 	Empty,
-	EmptyContent,
 	EmptyDescription,
 	EmptyHeader,
 	EmptyMedia,
 	EmptyTitle,
 } from "@/components/ui/empty";
+import { Spinner } from "@/components/ui/spinner";
+import { useJobStore } from "@/lib/store";
+import { BriefcaseBusiness } from "lucide-react";
 
 export const Dashboard = () => {
+	const { getJobParams } = useJobStore();
+	console.log("🚀 ~ Dashboard ~ getJobParams:", getJobParams);
 	const {
 		data: jobs,
 		isLoading: fetchJobsLoading,
 		error: fetchJobsError,
-	} = useGetJobs();
+	} = useGetJobs({
+		params: getJobParams
+	});
 
 	return (
 		<MainWrapper>
-			<div className="bg-primary rounded-lg text-primary-foreground text-lg py-4 px-2 flex justify-between items-center">
-				<h2>
-					Hello, <span className="font-bold">Xannna</span>
-				</h2>
-				<Button
-					variant={"outline"}
-					size={"icon"}
-					className="rounded-full bg-primary"
-				>
-					<Search />
-				</Button>
-			</div>
+			<DashboardHeader />
 			<div className="grow rounded-lg overflow-hidden flex flex-col mt-2">
-				<div className="overflow-y-auto h-full flex flex-col gap-2">
+				<div className="overflow-y-auto h-full flex flex-col gap-2 no-scrollbar shadow-2xl">
 					{fetchJobsError && <p>Something went wrong.</p>}
 					{fetchJobsLoading && !jobs && (
 						<div className="m-auto w-fit flex items-center justify-center animate-bounce">
@@ -53,8 +45,10 @@ export const Dashboard = () => {
 							</EmptyHeader>
 						</Empty>
 					)}
-					{!fetchJobsLoading &&
-						jobs?.map((job) => <JobCard job={job} key={job.id} />)}
+					<div className="rounded-lg no-scrollbar grid grid-cols-1 md:grid-cols-3 gap-2 p-0.5">
+						{!fetchJobsLoading &&
+							jobs?.map((job) => <JobCard job={job} key={job.id} />)}
+					</div>
 				</div>
 			</div>
 		</MainWrapper>
