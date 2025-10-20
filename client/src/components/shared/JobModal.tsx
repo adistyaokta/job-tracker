@@ -4,15 +4,16 @@
 import { useAddJob } from "@/api/jobs";
 import { useUpdateApplication } from "@/api/jobs/";
 import { useJobStore } from "@/lib/store";
+import { cn } from "@/lib/utils";
 import { formatDate } from "@/utils";
 import { useForm } from "@tanstack/react-form";
 import { Plus } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router";
 import {
 	type CreateJob,
 	CreateJobSchema,
-	InterviewType,
+	type InterviewType,
 	InterviewTypeLabels,
 	type JobStatus,
 	type JobType,
@@ -42,7 +43,6 @@ import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { Toggle } from "../ui/toggle";
 import { Divider } from "./Divider";
-import { cn } from "@/lib/utils";
 
 const defaultValues = {
 	company: "",

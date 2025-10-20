@@ -1,8 +1,7 @@
 /** biome-ignore-all lint/correctness/useExhaustiveDependencies: <explanation> */
 import { useDebounce } from "@/hooks";
-import { useJobStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
-import { CircleX, Search, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";

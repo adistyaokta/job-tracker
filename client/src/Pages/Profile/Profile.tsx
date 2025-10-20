@@ -1,7 +1,7 @@
 import { MainWrapper } from "@/components/shared";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Settings } from "lucide-react";
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import { Button } from "@/components/ui/button";
+// import { ArrowRight, Settings } from "lucide-react";
 
 export const Profile = () => {
 	return (
