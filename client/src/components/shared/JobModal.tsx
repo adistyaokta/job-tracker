@@ -2,7 +2,7 @@
 /** biome-ignore-all lint/correctness/useExhaustiveDependencies: <explanation> */
 
 import { useAddJob } from "@/api/jobs";
-import { useUpdateApplication } from "@/api/jobs/updateApplication";
+import { useUpdateApplication } from "@/api/jobs/";
 import { useJobStore } from "@/lib/store";
 import { formatDate } from "@/utils";
 import { useForm } from "@tanstack/react-form";

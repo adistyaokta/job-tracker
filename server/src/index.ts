@@ -11,7 +11,7 @@ export const app = new Hono()
 	.use(logger())
 	.use(cors())
 
-	.route("/jobs", jobs);
+	.route("/api/jobs", jobs);
 
 export default {
 	port: Number(process.env.PORT) || 3001,

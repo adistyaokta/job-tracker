@@ -8,7 +8,7 @@ export type GetJobParams = GetParams & {
 };
 
 export const getJobs = async (params?: GetJobParams) => {
-	const response = await axiosInstance.get<ApiResponse<Job[]>>("/jobs", {
+	const response = await axiosInstance.get<ApiResponse<Job[]>>("/api/jobs", {
 		params,
 	});
 

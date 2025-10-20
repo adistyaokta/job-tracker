@@ -5,7 +5,7 @@ import type { UpdateJob } from "shared";
 import { getJobsQueryKey } from "./getJobs";
 
 export const updateApplication = async (job: UpdateJob) => {
-	const response = await axiosInstance.put(`/jobs/${job.id}`, job);
+	const response = await axiosInstance.put(`/api/jobs/${job.id}`, job);
 
 	return response.data;
 };

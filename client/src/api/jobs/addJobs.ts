@@ -5,7 +5,7 @@ import type { CreateJob } from "shared";
 import { getJobsQueryKey } from "./getJobs";
 
 export const addJob = async (job: CreateJob) => {
-	const response = await axiosInstance.post("/jobs", job);
+	const response = await axiosInstance.post("/api/jobs", job);
 
 	return response.data;
 };
