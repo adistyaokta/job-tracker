@@ -13,6 +13,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { initialParam, useJobStore } from "@/lib/store";
 import { BriefcaseBusiness, FunnelX } from "lucide-react";
+import isEqual from "lodash/isEqual";
 
 export const Dashboard = () => {
 	const { getJobParams, setGetJobParams } = useJobStore();
@@ -25,6 +26,8 @@ export const Dashboard = () => {
 		params: getJobParams,
 	});
 
+	const noFilters = isEqual(initialParam, getJobParams);
+
 	return (
 		<MainWrapper>
 			<DashboardHeader
@@ -34,14 +37,16 @@ export const Dashboard = () => {
 				}}
 			/>
 			<div className="flex items-center justify-end gap-1">
+				{!noFilters && (
+					<Button
+						disabled={noFilters}
+						size={"icon"}
+						onClick={() => setGetJobParams(initialParam)}
+					>
+						<FunnelX />
+					</Button>
+				)}
 				<FilterStatus />
-				<Button
-					disabled={getJobParams === initialParam}
-					size={"icon"}
-					onClick={() => setGetJobParams(initialParam)}
-				>
-					<FunnelX />
-				</Button>
 			</div>
 			<div className="grow rounded-lg overflow-hidden flex flex-col">
 				<div className="relative overflow-y-auto h-full flex flex-col gap-2 no-scrollbar shadow-2xl">

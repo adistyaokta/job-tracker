@@ -6,7 +6,11 @@ import { ArrowRight, Settings } from "lucide-react";
 export const Profile = () => {
 	return (
 		<MainWrapper>
-			<div className="bg-primary rounded-lg text-primary-foreground text-center text-lg px-2 py-4 justify-center items-center">
+			<div className="flex flex-col gap-2 items-center justify-center grow text-7xl">
+				🚧 Coming Soon 👷🏽‍♂️
+				<p className="text-lg">Profile page is under construction....</p>
+			</div>
+			{/* <div className="bg-primary rounded-lg text-primary-foreground text-center text-lg px-2 py-4 justify-center items-center">
 				<h3>Profile</h3>
 			</div>
 			<div className="py-4 flex flex-col justify-center items-center gap-2">
@@ -38,7 +42,7 @@ export const Profile = () => {
 					</span>
 					<ArrowRight />
 				</div>
-			</div>
+			</div> */}
 		</MainWrapper>
 	);
 };

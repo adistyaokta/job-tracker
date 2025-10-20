@@ -8,7 +8,7 @@ import { formatDate } from "@/utils";
 import { useForm } from "@tanstack/react-form";
 import { Plus } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import {
 	type CreateJob,
 	CreateJobSchema,
@@ -42,6 +42,7 @@ import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { Toggle } from "../ui/toggle";
 import { Divider } from "./Divider";
+import { cn } from "@/lib/utils";
 
 const defaultValues = {
 	company: "",
@@ -57,7 +58,7 @@ const defaultValues = {
 } as CreateJob;
 
 export const JobModal = () => {
-	const ref = useRef(null);
+	const navigate = useNavigate();
 	const {
 		isJobDialogOpen: open,
 		setJobDialogOpen: setOpen,
@@ -70,6 +71,7 @@ export const JobModal = () => {
 			onSuccess: () => {
 				form.reset();
 				setOpen(false);
+				navigate("/dashboard");
 			},
 		},
 	});
@@ -103,7 +105,6 @@ export const JobModal = () => {
 
 		const hasInterview = job.interview !== null;
 
-		// Merge withInterview into the job data before resetting
 		form.reset({
 			...job,
 			withInterview: hasInterview,
@@ -119,7 +120,7 @@ export const JobModal = () => {
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger ref={ref} asChild>
+			<DialogTrigger asChild>
 				<Button
 					size={"icon"}
 					variant={"secondary"}
@@ -135,6 +136,7 @@ export const JobModal = () => {
 						{job ? "Update Application Detail" : "Add New Job"}
 					</DialogTitle>
 				</DialogHeader>
+				<Divider />
 				<form
 					onSubmit={(e) => {
 						e.preventDefault();
@@ -346,6 +348,7 @@ export const JobModal = () => {
 						<form.Field name="withInterview">
 							{({ state, handleChange, form }) => (
 								<Toggle
+									className={cn("bg-primary text-primary-foreground")}
 									pressed={!!state.value}
 									onPressedChange={(val) => {
 										handleChange(val);

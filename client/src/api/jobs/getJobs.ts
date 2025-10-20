@@ -15,7 +15,8 @@ export const getJobs = async (params?: GetJobParams) => {
 	return response.data.data;
 };
 
-export const getJobsQueryKey = (params?: GetJobParams) => ["jobs", params];
+export const getJobsQueryKey = (params?: GetJobParams) =>
+	params ? ["jobs", params] : ["jobs"];
 
 const getJobsQueryOptions = (params?: GetJobParams) => {
 	return queryOptions({
