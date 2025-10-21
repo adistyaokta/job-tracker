@@ -9,8 +9,7 @@ function Home() {
 			<h1 className="text-5xl font-black">Job Tracker</h1>
 			<h2 className="text-2xl font-bold">Apply. Track. Succeed.</h2>
 			<p className="text-center">
-				A simple way to organize and monitor every job application — so you
-				never miss an update or opportunity.
+				A simple way to organize and monitor every job application.
 			</p>
 			<div className="flex items-center gap-4">
 				<Button asChild>
