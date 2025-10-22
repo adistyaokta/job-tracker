@@ -22,6 +22,6 @@ export const app = new Hono()
 
 export default {
 	port: Number(process.env.PORT) || 3001,
-	// host: process.env.HOST,
+	hostname: "0.0.0.0",
 	fetch: app.fetch,
 };
