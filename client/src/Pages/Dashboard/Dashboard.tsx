@@ -14,6 +14,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { initialParam, useJobStore } from "@/lib/store";
 import { BriefcaseBusiness, FunnelX } from "lucide-react";
 import isEqual from "lodash/isEqual";
+import { authClient } from "@/lib/auth-client";
 
 export const Dashboard = () => {
 	const { getJobParams, setGetJobParams } = useJobStore();
@@ -84,6 +85,24 @@ export const Dashboard = () => {
 					)}
 				</div>
 			</div>
+
+			<Button
+				className="absolute bottom-8"
+				onClick={() => {
+					const login = async () => {
+						const { data, error } = await authClient.signUp.email({
+							name: "John Doe", // required
+							email: "john.doe@example.com", // required
+							password: "password1234", // required
+						});
+						console.log("🚀 ~ login ~ error:", error);
+						console.log("🚀 ~ login ~ data:", data);
+					};
+					login();
+				}}
+			>
+				signup
+			</Button>
 		</MainWrapper>
 	);
 };
